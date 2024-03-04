@@ -23,7 +23,7 @@ public:
 
 	virtual ~Component() = default;
 
-protected: // For overloading.
+public: // For overloading.
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
 	virtual void Update(sf::Time deltaTime) = 0;
 	virtual void HandleEvent(const sf::Event& event) = 0;

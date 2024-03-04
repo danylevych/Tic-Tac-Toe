@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Component/Component.h"
+#include "../../Tools/ResourceHolder/Holders.h"
 
 #include <SFML/Graphics/Text.hpp>
 
@@ -12,7 +13,7 @@ private:
 
 public:
 	Label();
-	Label(const std::string string, const sf::Font& font, size_t fontSize);
+	Label(const std::string string, const FontHolder& font, size_t fontSize);
 
 	virtual ~Label() override = default;
 
@@ -21,7 +22,14 @@ public: // Overriden section.
 	virtual void Update(sf::Time deltaTime) override;
 	virtual void HandleEvent(const sf::Event& event) override;
 
-public:
+public: // Get section.
+	const std::string& GetText() const;
+	size_t GetFontSize() const;
+
+public: // Set section.
+	void SetText(const std::string& string);
+	void SetFontSize(size_t fontSize);
+	void SetFont(const sf::Font& font);
 
 };
 

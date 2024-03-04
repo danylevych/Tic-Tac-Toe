@@ -130,6 +130,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scenes\Main\Main.cpp" />
+    <ClCompile Include="src\Scenes\Scene\Scene.cpp" />
     <ClCompile Include="src\GUI\Button\Button.cpp" />
     <ClCompile Include="src\GUI\Label\Label.cpp" />
     <ClCompile Include="src\GUI\Component\Component.cpp" />
@@ -137,6 +139,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scenes\Main\Main.h" />
+    <ClInclude Include="src\Scenes\Scene\Scene.h" />
     <ClInclude Include="src\GUI\Utilities.h" />
     <ClInclude Include="src\Tools\Enums\FontID.h" />
     <ClInclude Include="src\Tools\Enums\TextureID.h" />

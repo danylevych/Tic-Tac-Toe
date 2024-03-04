@@ -61,7 +61,7 @@ private: // Init section.
 	void InitSprite();
 	void InitText(const FontHolder& fonts, const std::string& string);
 
-private: // Helper funcktions section.
+private: // Helper functions section.
 
 };
 

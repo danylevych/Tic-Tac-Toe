@@ -13,7 +13,6 @@ Button::Button(size_t width, size_t height, const FontHolder& fonts, const Textu
 	InitTextures(textures);
 	InitSprite();
 	InitText(fonts, string);
-	// TODO: Set the settings for text.
 }
 
 void Button::InitTextures(const TextureHolder& textures)
@@ -73,6 +72,7 @@ void Button::Update(sf::Time deltaTime)
 
 void Button::HandleEvent(const sf::Event& event)
 {
+	// EMPTY.
 }
 
 void Button::SetButtonState(const State& state)
