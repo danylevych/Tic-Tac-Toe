@@ -23,12 +23,16 @@ public:
 
 private:
 	std::vector<sf::Texture*> textures;
+	
 	State state;
 	sf::Text text;
 	sf::Sprite sprite;
 	Command action;
-
 	sf::IntRect size;
+	int transitionNum;
+
+	const int TRANSITION_TO_DEFAULT_STATE = 0;
+	const int TRANSITION_TO_PRESSED_STATE = 0;
 
 public:
 	Button(size_t width, size_t height, const FontHolder& fonts, const TextureHolder& textures, const std::string& string = "");
@@ -61,7 +65,11 @@ private: // Init section.
 	void InitSprite();
 	void InitText(const FontHolder& fonts, const std::string& string);
 
-private: // Helper functions section.
+public: // Overriden default functions.
+	void setPosition(sf::Vector2f pos);
+	void setPosition(float x, float y);
 
+private: // Helper functions.
+	bool ConsistMouse() const;
 };
 

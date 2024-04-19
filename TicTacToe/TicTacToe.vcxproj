@@ -130,7 +130,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Scenes\Main\Main.cpp" />
+    <ClCompile Include="src\Scenes\SceneStack\SceneStack.cpp" />
+    <ClCompile Include="src\Application\Context\Context.cpp" />
+    <ClCompile Include="src\Scenes\Main\MainScene.cpp" />
     <ClCompile Include="src\Scenes\Scene\Scene.cpp" />
     <ClCompile Include="src\GUI\Button\Button.cpp" />
     <ClCompile Include="src\GUI\Label\Label.cpp" />
@@ -139,7 +141,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Scenes\Main\Main.h" />
+    <ClInclude Include="src\Scenes\SceneStack\SceneStack.h" />
+    <ClInclude Include="src\Application\Context\Context.h" />
+    <ClInclude Include="src\Scenes\Main\MainScene.h" />
     <ClInclude Include="src\Scenes\Scene\Scene.h" />
     <ClInclude Include="src\GUI\Utilities.h" />
     <ClInclude Include="src\Tools\Enums\FontID.h" />
@@ -150,6 +154,15 @@
     <ClInclude Include="src\GUI\Label\Label.h" />
     <ClInclude Include="src\GUI\Component\Component.h" />
     <ClInclude Include="src\Application\Application.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\Textures\Background.png" />
+    <Image Include="data\Textures\ButtonDefault.png" />
+    <Image Include="data\Textures\ButtonPressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\Fonts\Madimi One\MadimiOne-Regular.ttf" />
+    <Font Include="data\Fonts\Roboto\Roboto-Bold.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

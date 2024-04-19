@@ -26,9 +26,10 @@ protected:
 	Scene(const sf::Texture& texture);
 	Scene(const sf::Texture& texture, sf::IntRect rect);
 
+public:
 	virtual ~Scene() = default;
 
-protected: // Overriding section.
+public: // Overriding section.
 	virtual void Update(sf::Time deltaTime);
 	virtual void HandleEvent(const sf::Event& event);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

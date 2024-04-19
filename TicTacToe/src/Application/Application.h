@@ -4,11 +4,15 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
+#include "Context/Context.h"
+#include "../Scenes/SceneStack/SceneStack.h"
+
 
 class Application : public sf::NonCopyable
 {
 private:
-	sf::RenderWindow window;
+	Context* context;
+	SceneStack sceneStack;
 
 public:
 	Application();
@@ -20,5 +24,11 @@ private:
 	void Update(sf::Time deltaTime);
 	void Render();
 	void Process();
+
+private:
+	void InitContext();
+	void InitFonts();
+	void InitTextures();
+	void InitWindow();
 };
 

@@ -36,7 +36,13 @@
     <ClCompile Include="src\Scenes\Scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\Main\Main.cpp">
+    <ClCompile Include="src\Scenes\Main\MainScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application\Context\Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\SceneStack\SceneStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,8 +77,29 @@
     <ClInclude Include="src\Scenes\Scene\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Main\Main.h">
+    <ClInclude Include="src\Scenes\Main\MainScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Application\Context\Context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\SceneStack\SceneStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\Textures\ButtonPressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="data\Textures\Background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="data\Textures\ButtonDefault.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\Fonts\Madimi One\MadimiOne-Regular.ttf" />
+    <Font Include="data\Fonts\Roboto\Roboto-Bold.ttf" />
   </ItemGroup>
 </Project>

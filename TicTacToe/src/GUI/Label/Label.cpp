@@ -12,7 +12,7 @@ Label::Label()
 
 Label::Label(const std::string string, const FontHolder& font, size_t fontSize)
 	: Component(false)
-	, text(string, font.Get(FontID::Label), fontSize)
+	, text(string, *font.Get(FontID::Label), fontSize)
 {	
 	Centered(text);
 }

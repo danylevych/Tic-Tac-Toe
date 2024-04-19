@@ -1,14 +1,17 @@
 #include "Button.h"
 #include "../Utilities.h"
+#include "../../Application/Context/Context.h"
 
 #include <SFML/Window/Event.hpp>
 
+#include <iostream>
 
 Button::Button(size_t width, size_t height, const FontHolder& fonts, const TextureHolder& textures, const std::string& string)
 	: Component(true)
 	, state(State::Default)
 	, size(0, 0, width, height)
 	, text()
+	, transitionNum(0)
 {
 	InitTextures(textures);
 	InitSprite();
@@ -33,8 +36,26 @@ void Button::InitText(const FontHolder& fonts, const std::string& string)
 	text.setFont(*fonts.Get(FontID::Button));
 	text.setString(string);
 	Centered(text);
-	text.setPosition(sprite.getPosition());
+	auto pos = sprite.getPosition();
+	pos.y -= 5;
+	text.setPosition(pos);
 }
+
+void Button::setPosition(sf::Vector2f pos)
+{
+	this->setPosition(pos.x, pos.y);
+}
+
+void Button::setPosition(float x, float y)
+{
+	//Transformable::setPosition(x, y);
+	sprite.setPosition(x, y);
+	auto pos = sprite.getPosition();
+	pos.y -= 5;
+	text.setPosition(pos);
+}
+
+
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -46,28 +67,36 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Button::Update(sf::Time deltaTime)
 {
+	transitionNum--;
+		
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		if (sprite.getGlobalBounds().contains(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y))
+		if (ConsistMouse())
 		{
 			state = State::Pressed;
-		}
-		else
-		{
-			state = State::Default;
+			transitionNum = TRANSITION_TO_PRESSED_STATE;
 		}
 	}
-	else
+	else if (transitionNum <= TRANSITION_TO_DEFAULT_STATE)
 	{
 		state = State::Default;
 	}
 
 	sprite.setTexture(*textures[static_cast<size_t>(state)]);
 	
-	if (state == State::Pressed)
+	if (state == State::Pressed && action)
 	{
 		action();
 	}
+}
+
+bool Button::ConsistMouse() const
+{
+	sf::Vector2i mousePos = sf::Mouse::getPosition(*Context::GetInstance()->window);
+	sf::Vector2f thisPos = sprite.getPosition();
+	sf::FloatRect borders(thisPos.x - size.width/2, thisPos.y - size.height/2, size.width, size.height);
+
+	return borders.contains(mousePos.x, mousePos.y);
 }
 
 void Button::HandleEvent(const sf::Event& event)
@@ -83,7 +112,7 @@ void Button::SetButtonState(const State& state)
 void Button::SetText(const std::string& text)
 {
 	this->text.setString(text);
-	Centered(text);
+	Centered(this->text);
 }
 
 void Button::SetWidth(size_t width)
@@ -145,4 +174,3 @@ sf::IntRect Button::GetSize() const
 {
 	return size;
 }
-
