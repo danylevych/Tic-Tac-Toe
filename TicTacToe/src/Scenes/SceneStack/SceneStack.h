@@ -5,9 +5,10 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "../Scene/Scene.h"
 
 
-class Scene;
+class Context;
 
 class SceneStack : sf::NonCopyable
 {
@@ -19,7 +20,7 @@ public:
 
 private:
 	Context* context;
-	std::stack<std::unique_ptr<Scene>> scenesStack;
+	std::stack<Scene::Ptr> scenesStack;
 
 public:
 	SceneStack(Context* context);

@@ -43,6 +43,10 @@ void Application::Update(sf::Time deltaTime)
 	{
 		sceneStack.Update(deltaTime);
 	}
+	else // If the stack of scenes is empty.
+	{
+		context->window->close();
+	}
 }
 
 void Application::Render()

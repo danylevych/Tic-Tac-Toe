@@ -1,15 +1,19 @@
 #include "SceneStack.h"
 
 #include "../Scene/Scene.h"
+#include "../Main/MainScene.h"
 #include "../../Application/Context/Context.h"
 
 
-Scene::Ptr GetScene(const SceneStack::SceneType& type, Context* context)
+Scene::Ptr GetScene(const SceneStack::SceneType& type, Context& context, SceneStack* stack)
 {
 	switch (type)
 	{
 	case SceneStack::SceneType::Main:
-		// TODO: Create a bilder class, that will have returned the correct pointer.
+		return Scene::Ptr(new MainScene(context, stack));
+
+	default:
+		return Scene::Ptr(new MainScene(context, stack));
 	}
 }
 
@@ -20,7 +24,7 @@ SceneStack::SceneStack(Context* context)
 
 void SceneStack::Push(const SceneType& type)
 {
-	scenesStack.push(GetScene(type, context));
+	scenesStack.push(GetScene(type, *context, this));
 }
 
 void SceneStack::Pop()

@@ -1,25 +1,17 @@
 #include "MainScene.h"
 #include "../../GUI/Label/Label.h"
 #include "../../GUI/Button/Button.h"
+#include "../SceneStack/SceneStack.h"
 
 
-MainScene::MainScene(Context& context)
-	: Scene()
-	, context(&context)
+MainScene::MainScene(Context& context, SceneStack* sceneStack)
+	: Scene(context, sceneStack)
 {	
 	InitComponents();
 }
 
-MainScene::MainScene(Context& context, const sf::Texture& texture)
-	: Scene(texture)
-	, context(&context)
-{	
-	InitComponents();
-}
-
-MainScene::MainScene(Context& context, const sf::Texture& texture, sf::IntRect rect)
-	: Scene(texture, rect)
-	, context(&context)
+MainScene::MainScene(Context& context, SceneStack* sceneStack, const sf::Texture& texture)
+	: Scene(context, sceneStack, texture)
 {	
 	InitComponents();
 }
@@ -34,11 +26,14 @@ void MainScene::InitComponents()
 
 	std::unique_ptr<Button> play{ new Button(150, 50, context->fonts, context->textures, "Play") };
 	play->setPosition(size.x / 2.f, yPosition);
+	play->SetCommand(Button::Command([this]() {
+			// TODO: Call the GameScene.
+		}));
 
 	std::unique_ptr<Button> exit{ new Button(150, 50, context->fonts, context->textures, "Exit") };
 	exit->setPosition(size.x / 2.f, yPosition + 70);
 	exit->SetCommand(Button::Command([this]() {
-			context->window->close();
+			sceneStack->Clear();
 		}));
 
 	components.push_back(std::move(title));
