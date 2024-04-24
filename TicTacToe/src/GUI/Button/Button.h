@@ -29,10 +29,10 @@ private:
 	sf::Sprite sprite;
 	Command action;
 	sf::IntRect size;
-	int transitionNum;
+	
+	sf::Time animTime;
 
-	const int TRANSITION_TO_DEFAULT_STATE = 0;
-	const int TRANSITION_TO_PRESSED_STATE = 0;
+	const sf::Time FULL_ANIMATION = sf::seconds(0.3f);
 
 public:
 	Button(size_t width, size_t height, const FontHolder& fonts, const TextureHolder& textures, const std::string& string = "");
@@ -41,6 +41,9 @@ public: // Overriden section.
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void Update(sf::Time deltaTime) override;
 	virtual void HandleEvent(const sf::Event& event) override;
+
+public:
+	void Call();
 
 public: // Set section. 
 	void SetButtonState(const State& state);
@@ -59,7 +62,7 @@ public: // Get section.
 	size_t GetHeight() const;
 	const Command& GetCommand() const;
 	sf::IntRect GetSize() const;
-
+	
 private: // Init section.
 	void InitTextures(const TextureHolder& textures);
 	void InitSprite();

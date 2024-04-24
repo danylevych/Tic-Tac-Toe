@@ -27,7 +27,7 @@ void MainScene::InitComponents()
 	std::unique_ptr<Button> play{ new Button(150, 50, context->fonts, context->textures, "Play") };
 	play->setPosition(size.x / 2.f, yPosition);
 	play->SetCommand(Button::Command([this]() {
-			// TODO: Call the GameScene.
+			sceneStack->Push(SceneStack::SceneType::Game);
 		}));
 
 	std::unique_ptr<Button> exit{ new Button(150, 50, context->fonts, context->textures, "Exit") };

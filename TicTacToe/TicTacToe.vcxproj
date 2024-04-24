@@ -130,6 +130,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scenes\Game\GameScene.cpp" />
     <ClCompile Include="src\Scenes\SceneStack\SceneStack.cpp" />
     <ClCompile Include="src\Application\Context\Context.cpp" />
     <ClCompile Include="src\Scenes\Main\MainScene.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scenes\Game\GameScene.h" />
     <ClInclude Include="src\Scenes\SceneStack\SceneStack.h" />
     <ClInclude Include="src\Application\Context\Context.h" />
     <ClInclude Include="src\Scenes\Main\MainScene.h" />

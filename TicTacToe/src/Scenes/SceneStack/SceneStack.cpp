@@ -2,6 +2,7 @@
 
 #include "../Scene/Scene.h"
 #include "../Main/MainScene.h"
+#include "../Game/GameScene.h"
 #include "../../Application/Context/Context.h"
 
 
@@ -11,6 +12,9 @@ Scene::Ptr GetScene(const SceneStack::SceneType& type, Context& context, SceneSt
 	{
 	case SceneStack::SceneType::Main:
 		return Scene::Ptr(new MainScene(context, stack));
+
+	case SceneStack::SceneType::Game:
+		return Scene::Ptr(new GameScene(context, stack));
 
 	default:
 		return Scene::Ptr(new MainScene(context, stack));

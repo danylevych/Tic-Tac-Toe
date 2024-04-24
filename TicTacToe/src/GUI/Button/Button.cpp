@@ -11,7 +11,7 @@ Button::Button(size_t width, size_t height, const FontHolder& fonts, const Textu
 	, state(State::Default)
 	, size(0, 0, width, height)
 	, text()
-	, transitionNum(0)
+	, animTime(sf::Time::Zero)
 {
 	InitTextures(textures);
 	InitSprite();
@@ -67,46 +67,50 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Button::Update(sf::Time deltaTime)
 {
-	transitionNum--;
-		
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		if (ConsistMouse())
-		{
-			state = State::Pressed;
-			transitionNum = TRANSITION_TO_PRESSED_STATE;
-		}
-	}
-	else if (transitionNum <= TRANSITION_TO_DEFAULT_STATE)
-	{
-		state = State::Default;
-	}
-
 	sprite.setTexture(*textures[static_cast<size_t>(state)]);
-	
-	if (state == State::Pressed && action)
-	{
-		action();
-	}
+
+	animTime += deltaTime;
 }
 
 bool Button::ConsistMouse() const
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*Context::GetInstance()->window);
 	sf::Vector2f thisPos = sprite.getPosition();
-	sf::FloatRect borders(thisPos.x - size.width/2, thisPos.y - size.height/2, size.width, size.height);
+	sf::FloatRect borders(thisPos.x - size.width / 2, thisPos.y - size.height / 2, size.width, size.height);
 
 	return borders.contains(mousePos.x, mousePos.y);
 }
 
+bool callAction = false;
+
 void Button::HandleEvent(const sf::Event& event)
 {
-	// EMPTY.
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left && ConsistMouse())
+		{
+			state = State::Pressed;
+		}
+	}
+	else if (animTime >= FULL_ANIMATION)
+	{
+		animTime = sf::Time::Zero;
+		Call();
+		state = State::Default;
+	}
 }
 
 void Button::SetButtonState(const State& state)
 {
 	this->state = state;
+}
+
+void Button::Call()
+{
+	if (action && state == State::Pressed)
+	{
+		action();
+	}
 }
 
 void Button::SetText(const std::string& text)
