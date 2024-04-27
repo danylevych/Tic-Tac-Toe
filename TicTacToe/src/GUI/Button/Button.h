@@ -20,6 +20,7 @@ public:
 	};
 
 	using Command = std::function<void()>;
+	using Ptr = std::unique_ptr<Button>;
 
 private:
 	std::vector<sf::Texture*> textures;
