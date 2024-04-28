@@ -20,3 +20,11 @@ std::string Player::GetTypeAsString() const
 		return "O";
 	}
 }
+
+Player::Action Player::GetAction(const std::vector<std::vector<Button::Ptr>>& board)
+{
+	Action action{};
+	action.SetInfinit();
+	
+	return action;
+}

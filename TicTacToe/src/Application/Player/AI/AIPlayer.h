@@ -9,26 +9,23 @@
 class AIPlayer : public Player
 {
 public:
-	struct Action
-	{
-		int i;
-		int j;
-	};
 
 public:
 	using Board = std::vector<std::vector<std::string>>;
 
 private:
-	Board field;
+	Board board;
 
 public:
-	AIPlayer(Type type, std::vector<std::vector<Button::Ptr>>& field);
+	AIPlayer(Type type);
 
 	virtual ~AIPlayer() = default;
 
+public:
+	virtual Action GetAction(const std::vector<std::vector<Button::Ptr>>& board) override;
+
 private:
-	void InitFieldSize(size_t size);
-	void InitField(std::vector<std::vector<Button::Ptr>>& field);
+	void FillBoard(const std::vector<std::vector<Button::Ptr>>& board);
 
 public:
 	static std::string GetPlayer(const Board& board);
@@ -36,6 +33,7 @@ public:
 	static std::string GetWinner(const Board& board);
 	static int Utility(const Board& board);
 	static Action MinMax(Board& board);
+	static Board Result(const Board& board, Action action);
 
 };
 

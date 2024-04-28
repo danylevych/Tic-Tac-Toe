@@ -1,23 +1,32 @@
 #include "GameScene.h"
+
 #include <iostream>
 #include "../../GUI/Label/Label.h"
+#include "../../Application/Player/AI/AIPlayer.h"
 
 
 GameScene::GameScene(Context& context, SceneStack* stack)
 	: Scene(context, stack)
+	, currentPlayer(Player::Type::X)
 {
+	InitPlayers();
 	InitComponetn();
 }
 
 GameScene::GameScene(Context& context, SceneStack* stack, const sf::Texture& texture)
 	: Scene(context, stack, texture)
+	, currentPlayer(Player::Type::X)
 {
+	InitPlayers();
 	InitComponetn();
 }
+
 
 void GameScene::Update(sf::Time deltaTime)
 {
 	Scene::Update(deltaTime);
+
+	HandlePlayerAction();
 
 	for (auto& row : field)
 	{
@@ -52,6 +61,52 @@ void GameScene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			cell->draw(target, states);
 		}
 	}
+}
+
+
+void GameScene::HandlePlayerAction()
+{
+	Player* currentPlayer = GetCurrentPlayer();
+
+	Player::Action action = currentPlayer->GetAction(field);
+
+	if (action.IsUndefined()) 
+	{
+		return;
+	}
+
+	field[action.i][action.j]->SetText(currentPlayer->GetTypeAsString());
+}
+
+Player* GameScene::GetCurrentPlayer()
+{
+	int numOfFullCells = 0;
+
+	for (auto& row : field)
+	{
+		numOfFullCells += std::count_if(row.begin(), row.end(), [](const Button::Ptr& item) {
+			if (item->GetText() == "X" || item->GetText() == "O") {
+				return true;
+			}
+			return false;
+		});
+	}
+
+	currentPlayer = (numOfFullCells % 2 == 0) ? Player::Type::X : Player::Type::O;
+
+	if (playerX->GetType() == currentPlayer) {
+		return playerX.get();
+	}
+	else if (playerO->GetType() == currentPlayer) {
+		return playerO.get();
+	}
+}
+
+void GameScene::InitPlayers()
+{
+	// TODO: Make the posiability to play tic tac toe beetween two person.
+	playerX = std::move(Player::Ptr(new Player(Player::Type::X)));
+	playerO = std::move(Player::Ptr(new AIPlayer(Player::Type::O)));
 }
 
 void GameScene::InitComponetn()
@@ -115,7 +170,17 @@ std::unique_ptr<Button> GameScene::GetFieldElement(float x, float y)
 	std::unique_ptr<Button> button(new Button(SIZE, SIZE, context->fonts, context->textures));
 
 	button->setPosition(x, y);
-	// TODO: Set the action.
+	
+	auto rawPtr = button.get();
+	button->SetCommand([this, rawPtr]() {
+		std::string cellValue = rawPtr->GetText();
+
+		if (!cellValue.empty()) {
+			return;
+		}
+		
+		rawPtr->SetText(GetCurrentPlayer()->GetTypeAsString());
+	});
 
 	return std::move(button);
 }

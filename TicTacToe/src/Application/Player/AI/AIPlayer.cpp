@@ -1,29 +1,30 @@
 #include "AIPlayer.h"
 
-AIPlayer::AIPlayer(Type type, std::vector<std::vector<Button::Ptr>>& field)
+AIPlayer::AIPlayer(Type type)
 	: Player(type)
 {	
-	InitFieldSize(field.size());
-	InitField(field);
-}
-
-void AIPlayer::InitFieldSize(size_t size)
-{
-	field.resize(size);
-
-	for (auto& row : field)
+	board.resize(3);
+	for (auto& row : board)
 	{
-		row.resize(size);
+		row.resize(3);
 	}
 }
 
-void AIPlayer::InitField(std::vector<std::vector<Button::Ptr>>& field)
+
+Player::Action AIPlayer::GetAction(const std::vector<std::vector<Button::Ptr>>&board)
 {
-	for (size_t i = 0; i < field.size(); i++)
+	FillBoard(board);
+
+	return MinMax(this->board);
+}
+
+void AIPlayer::FillBoard(const std::vector<std::vector<Button::Ptr>>& board)
+{
+	for (size_t i = 0; i < board.size(); i++)
 	{
-		for (size_t j = 0; j < field[0].size(); j++)
+		for (size_t j = 0; j < board[i].size(); j++)
 		{
-			this->field[i][j] = field[i][j]->GetText();
+			this->board[i][j] = board[i][j]->GetText();
 		}
 	}
 }
@@ -104,5 +105,49 @@ int AIPlayer::Utility(const Board& board)
 
 AIPlayer::Action AIPlayer::MinMax(Board& board)
 {
-	return Action();
+	std::string currentPalyer = GetPlayer(board);
+	std::set<Action> posibleActions = Actions(board);
+	std::map<int, Action> maxMove;
+	std::map<int, Action> minMove;
+
+	for (auto& action : posibleActions)
+	{
+		if (currentPalyer == "X")
+		{
+			maxMove[Utility(Result(board, action))] = action;
+		}
+		else
+		{
+			minMove[Utility(Result(board, action))] = action;
+		}
+	}
+
+	if (currentPalyer == "X")
+	{
+		return maxMove.rbegin()->second;
+	}
+	
+	if (currentPalyer == "O")
+	{
+		return minMove.begin()->second;
+	}
+
+	Action action{};
+	action.SetInfinit();
+
+	return action;
+}
+
+AIPlayer::Board AIPlayer::Result(const Board& board, Action action)
+{
+	Board newBoard;
+	newBoard.resize(board.size());
+	for (const auto& row : board)
+	{
+		//std::copy(row.cbegin(), row.cend(), std::back_inserter(newBoard));
+	}
+
+	newBoard[action.i][action.j] = GetPlayer(board);
+
+	return newBoard;
 }
