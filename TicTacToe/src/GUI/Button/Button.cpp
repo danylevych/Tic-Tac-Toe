@@ -154,7 +154,7 @@ Button::State Button::GetState() const
 	return state;
 }
 
-const std::string& Button::GetText() const
+const std::string Button::GetText() const
 {
 	return text.getString();
 }

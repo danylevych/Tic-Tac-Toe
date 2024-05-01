@@ -13,9 +13,20 @@ AIPlayer::AIPlayer(Type type)
 
 Player::Action AIPlayer::GetAction(const std::vector<std::vector<Button::Ptr>>&board)
 {
-	FillBoard(board);
+	//FillBoard(board);
 
-	return MinMax(this->board);
+	for (int i = 0; i < board.size(); i++)
+	{
+		for (int j = 0; j < board[0].size(); j++)
+		{
+			if (board[i][j]->GetText() == "")
+			{
+				return Action{ i, j };
+			}
+		}
+	}
+
+	//return MinMax(this->board);
 }
 
 void AIPlayer::FillBoard(const std::vector<std::vector<Button::Ptr>>& board)
@@ -142,9 +153,14 @@ AIPlayer::Board AIPlayer::Result(const Board& board, Action action)
 {
 	Board newBoard;
 	newBoard.resize(board.size());
-	for (const auto& row : board)
+	for (auto& row : newBoard)
 	{
-		//std::copy(row.cbegin(), row.cend(), std::back_inserter(newBoard));
+		row.resize(board[0].size());
+	}
+
+	for (int i = 0; i < board[0].size(); i++)
+	{
+		std::copy(board[i].begin(), board[i].end(), newBoard[i].begin());
 	}
 
 	newBoard[action.i][action.j] = GetPlayer(board);

@@ -58,7 +58,7 @@ public: // Set section.
 
 public: // Get section.
 	State GetState() const;
-	const std::string& GetText() const;
+	const std::string GetText() const;
 	size_t GetWidth() const;
 	size_t GetHeight() const;
 	const Command& GetCommand() const;

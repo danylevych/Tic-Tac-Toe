@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "../../GUI/Label/Label.h"
+#include "../../Scenes/SceneStack/SceneStack.h"
 #include "../../Application/Player/AI/AIPlayer.h"
 
 
@@ -41,13 +42,13 @@ void GameScene::HandleEvent(const sf::Event& event)
 {
 	Scene::HandleEvent(event);
 
-	for (auto& row : field)
+	/*for (auto& row : field)
 	{
 		for (auto& cell : row)
 		{
 			cell->HandleEvent(event);
 		}
-	}
+	}*/
 }
 
 void GameScene::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -68,23 +69,24 @@ void GameScene::HandlePlayerAction()
 {
 	Player* currentPlayer = GetCurrentPlayer();
 
-	Player::Action action = currentPlayer->GetAction(field);
-
-	if (action.IsUndefined()) 
-	{
+	if (dynamic_cast<AIPlayer*>(currentPlayer) == nullptr) {
+		std::cout << "Next move is for AI" << std::endl;
 		return;
 	}
 
-	field[action.i][action.j]->SetText(currentPlayer->GetTypeAsString());
+	Player::Action action = currentPlayer->GetAction(field);
+
+	field[action.i][action.j]->Call();
 }
 
 Player* GameScene::GetCurrentPlayer()
 {
-	int numOfFullCells = 0;
+	/*int numOfFullCells = 0;
 
 	for (auto& row : field)
 	{
 		numOfFullCells += std::count_if(row.begin(), row.end(), [](const Button::Ptr& item) {
+			std::cout << item->GetText() << std::endl;
 			if (item->GetText() == "X" || item->GetText() == "O") {
 				return true;
 			}
@@ -92,7 +94,11 @@ Player* GameScene::GetCurrentPlayer()
 		});
 	}
 
-	currentPlayer = (numOfFullCells % 2 == 0) ? Player::Type::X : Player::Type::O;
+	std::cout << "num: " << numOfFullCells << std::endl;
+
+	std::cout << (numOfFullCells % 2 == 0) << std::endl;
+
+	currentPlayer = (numOfFullCells % 2 == 0) ? Player::Type::X : Player::Type::O;*/
 
 	if (playerX->GetType() == currentPlayer) {
 		return playerX.get();
@@ -127,6 +133,8 @@ void GameScene::InitAdditionalComponents(const sf::Vector2f& anchor)
 
 	std::unique_ptr<Button> back{ new Button(120, 50, context->fonts, context->textures, "BACK") };
 	back->setPosition(80, windowSize.y - 50);
+
+	back->SetCommand([this]() { this->sceneStack->Pop(); });
 
 	components.push_back(std::move(title));
 	components.push_back(std::move(back));
@@ -180,6 +188,7 @@ std::unique_ptr<Button> GameScene::GetFieldElement(float x, float y)
 		}
 		
 		rawPtr->SetText(GetCurrentPlayer()->GetTypeAsString());
+		currentPlayer = (currentPlayer == Player::Type::X) ? Player::Type::O : Player::Type::X;
 	});
 
 	return std::move(button);
