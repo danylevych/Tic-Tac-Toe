@@ -1,16 +1,42 @@
 #include "Board.h"
+#include <iostream>
 
+#include "../Player/Player.h"
+#include "../Player/AI/AIPlayer.h"
 #include "../Context/Context.h"
 
-Board::Board(Context& context, sf::Vector2f anchor, size_t cellSize)
+bool operator==(const Board::Cell& left, const Board::Cell& right)
+{
+	return left->GetText() == right->GetText();
+}
+
+Board::Board(Context& context, sf::Vector2f anchor, size_t cellSize, std::unique_ptr<Player> playerX, std::unique_ptr<Player> playerO)
 	: context(&context)
+	, currentPlayer(PlayerType::X)
+	, playerX(nullptr)
+	, playerO(nullptr)
 {	
 	InitBoard(anchor, cellSize);
 }
 
 void Board::InitBoard(sf::Vector2f anchor, size_t cellSize)
 {
-	const int OFFSET = 80;
+	ResizeBoard(3);
+	FillBoard(anchor, cellSize);
+}
+
+void Board::ResizeBoard(size_t size)
+{
+	board.resize(size);
+	for (auto& row : board)
+	{
+		row.resize(size);
+	}
+}
+
+void Board::FillBoard(sf::Vector2f anchor, size_t cellSize)
+{
+	const int OFFSET = cellSize + 10;
 
 	for (int offsetY = -OFFSET, i = 0; offsetY <= OFFSET; offsetY += OFFSET, i++)
 	{
@@ -28,7 +54,16 @@ std::unique_ptr<Button> Board::GetFieldElement(float x, float y, size_t cellSize
 	button->setPosition(x, y);
 
 	auto rawPtr = button.get();
-	button->SetCommand([this, rawPtr]() {});
+	button->SetCommand([this, rawPtr]() {
+		std::string cellValue = rawPtr->GetText();
+
+		if (!cellValue.empty()) {
+			return;
+		}
+
+		rawPtr->SetText(GetCurrentPlayerAsString());
+		ChangeCurrentPlayer();
+	});
 
 	return std::move(button);
 }
@@ -46,14 +81,31 @@ std::string Board::GetCurrentPlayerAsString() const
 
 void Board::ChangeCurrentPlayer()
 {
-	if (currentPlayer == PlayerType::X)
-	{
+	if (currentPlayer == PlayerType::X) {
 		currentPlayer = PlayerType::O;
 	}
-	else
-	{
+	else {
 		currentPlayer = PlayerType::X;
 	}
+}
+
+bool Board::IsCellNotEmpty(const Cell& cell) const
+{
+	return !cell->GetText().empty();
+}
+
+bool Board::CurrentPlayerIsHuman() 
+{
+	return dynamic_cast<AIPlayer*>(GetCurrentPlayer()) == nullptr;
+}
+
+Player* Board::GetCurrentPlayer()
+{
+	if (GetCurrentPlayerAsString() == "X") {
+		return playerX.get();
+	}
+
+	return playerO.get();
 }
 
 void Board::Update(sf::Time deltaTime)
@@ -69,12 +121,15 @@ void Board::Update(sf::Time deltaTime)
 
 void Board::HandleEvent(const sf::Event& event)
 {
-	for (const auto& row : board)
-	{
-		for (const auto& cell : row)
-		{
-			cell->HandleEvent(event);
-		}
+	if (IsFull()) {
+		return;
+	}
+
+	if (CurrentPlayerIsHuman()) {
+		HandleEventForHumanPlayer(event);
+	}
+	else {
+		HandleEventForAIPlayer(event);
 	}
 }
 
@@ -89,30 +144,59 @@ void Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
+void Board::HandleEventForHumanPlayer(const sf::Event& event)
+{
+	for (const auto& row : board)
+	{
+		for (const auto& cell : row)
+		{
+			cell->HandleEvent(event);
+		}
+	}
+}
+
+void Board::HandleEventForAIPlayer(const sf::Event& event)
+{
+	Player::Action action = playerO->GetAction(board);
+	board[action.i][action.j]->Press();
+}
+
+void Board::SetPlayerX(Player* playerX)
+{
+	this->playerX.reset(playerX);
+}
+
+void Board::SetPlayerO(Player* playerO)
+{
+	this->playerO.reset(playerO);
+}
+
 Board::PlayerType Board::GetWinner() const
 {
 	// Checking for rows and columns.
 	for (size_t i = 0; i < board.size(); i++)
 	{
-		if (board[i][0] == board[i][1] && board[i][0] == board[i][2])
+		if (IsCellNotEmpty(board[i][0]) && board[i][0] == board[i][1] && board[i][0] == board[i][2])
 		{
-			return GetPlayerTypeFromCell(board[i][0]);
+			std::cout << "Here is the winner" << std::endl;
+			return GetPlayerTypeFrom(board[i][0]);
 		}
-		else if (board[0][i] == board[1][i] && board[0][i] == board[2][i])
+		else if (IsCellNotEmpty(board[0][i]) && board[0][i] == board[1][i] && board[0][i] == board[2][i])
 		{
-			return GetPlayerTypeFromCell(board[0][i]);
+			return GetPlayerTypeFrom(board[0][i]);
 		}
 	}
 
 	// Checking for diagonals.
-	if (board[0][0] == board[1][1] && board[0][0] == board[2][2])
+	if (IsCellNotEmpty(board[0][0]) && board[0][0] == board[1][1] && board[0][0] == board[2][2])
 	{
-		return GetPlayerTypeFromCell(board[0][0]);
+		std::cout << "Here is the winner" << std::endl;
+		return GetPlayerTypeFrom(board[0][0]);
 	}
 
-	if (board[0][2] == board[1][1] && board[0][2] == board[2][0])
+	if (IsCellNotEmpty(board[0][2]) && board[0][2] == board[1][1] && board[0][2] == board[2][0])
 	{
-		return GetPlayerTypeFromCell(board[0][2]);
+		return GetPlayerTypeFrom(board[0][2]);
 	}
 
 	return PlayerType::NONE;
@@ -138,3 +222,5 @@ bool Board::IsDraw() const
 {
 	return IsFull() && GetWinner() == PlayerType::NONE;
 }
+
+

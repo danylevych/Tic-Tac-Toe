@@ -89,14 +89,14 @@ void Button::HandleEvent(const sf::Event& event)
 	{
 		if (event.mouseButton.button == sf::Mouse::Left && ConsistMouse())
 		{
-			state = State::Pressed;
+			SetButtonState(State::Pressed);
 		}
 	}
 	else if (animTime >= FULL_ANIMATION)
 	{
 		animTime = sf::Time::Zero;
 		Call();
-		state = State::Default;
+		SetButtonState(State::Default);
 	}
 }
 
@@ -132,6 +132,12 @@ void Button::SetHeight(size_t height)
 void Button::SetSize(sf::IntRect size)
 {
 	this->size = size;
+}
+
+void Button::Press()
+{
+	SetButtonState(State::Pressed);
+	Call();
 }
 
 void Button::SetSize(size_t width, size_t height)

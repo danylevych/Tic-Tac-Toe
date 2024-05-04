@@ -3,6 +3,8 @@
 #include <SFML/Window/Event.hpp>
 
 #include "../Scenes/Main/MainScene.h"
+#include "../Scenes/GameType/GameTypeScene.h"
+#include "../Scenes/GameOver/GameOverScene.h"
 
 
 Application::Application()
@@ -10,7 +12,8 @@ Application::Application()
 	, sceneStack(context)
 {	
 	InitContext();
-	sceneStack.Push(SceneStack::SceneType::Main);
+	InitSceneFactory();
+	sceneStack.RequestPush(SceneStack::SceneType::Main);
 }
 
 void Application::Run()
@@ -43,7 +46,7 @@ void Application::Update(sf::Time deltaTime)
 	{
 		sceneStack.Update(deltaTime);
 	}
-	else // If the stack of scenes is empty.
+	else
 	{
 		context->window->close();
 	}
@@ -80,6 +83,17 @@ void Application::Process()
 			sceneStack.HandleEvent(event);
 		}
 	}
+}
+
+void Application::InitSceneFactory()
+{
+	sceneStack.RegisterScene<MainScene>(SceneStack::SceneType::Main);
+	sceneStack.RegisterScene<GameTypeScene>(SceneStack::SceneType::ChooseType);
+	sceneStack.RegisterScene<GameScene>(SceneStack::SceneType::GameAgainstAI, GameType::AgainstIA);
+	sceneStack.RegisterScene<GameScene>(SceneStack::SceneType::GameTwoPlayers, GameType::AgainstPlayer);
+	sceneStack.RegisterScene<GameOverScene>(SceneStack::SceneType::GameOverWinX, "The X Player had won");
+	sceneStack.RegisterScene<GameOverScene>(SceneStack::SceneType::GameOverWinO, "The O Player had won");
+	sceneStack.RegisterScene<GameOverScene>(SceneStack::SceneType::GameOverDraw, "Draw");
 }
 
 void Application::InitContext()

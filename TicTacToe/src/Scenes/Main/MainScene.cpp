@@ -27,13 +27,13 @@ void MainScene::InitComponents()
 	std::unique_ptr<Button> play{ new Button(150, 50, context->fonts, context->textures, "Play") };
 	play->setPosition(size.x / 2.f, yPosition);
 	play->SetCommand(Button::Command([this]() {
-			sceneStack->Push(SceneStack::SceneType::Game);
+			sceneStack->RequestPush(SceneStack::SceneType::ChooseType);
 		}));
 
 	std::unique_ptr<Button> exit{ new Button(150, 50, context->fonts, context->textures, "Exit") };
 	exit->setPosition(size.x / 2.f, yPosition + 70);
 	exit->SetCommand(Button::Command([this]() {
-			sceneStack->Clear();
+			sceneStack->RequestClear();
 		}));
 
 	components.push_back(std::move(title));

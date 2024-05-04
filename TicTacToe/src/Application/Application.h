@@ -26,6 +26,7 @@ private:
 	void Process();
 
 private:
+	void InitSceneFactory();
 	void InitContext();
 	void InitFonts();
 	void InitTextures();

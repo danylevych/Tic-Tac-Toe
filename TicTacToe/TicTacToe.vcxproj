@@ -130,6 +130,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scenes\GameOver\GameOverScene.cpp" />
+    <ClCompile Include="src\Scenes\GameType\GameTypeScene.cpp" />
+    <ClCompile Include="src\Application\Player\AI\MinMax\MinMax.cpp" />
     <ClCompile Include="src\Application\Board\Board.cpp" />
     <ClCompile Include="src\Application\Player\AI\AIPlayer.cpp" />
     <ClCompile Include="src\Application\Player\Player.cpp" />
@@ -145,6 +148,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scenes\GameOver\GameOverScene.h" />
+    <ClInclude Include="src\Scenes\GameType\GameTypeScene.h" />
+    <ClInclude Include="src\Application\Player\AI\MinMax\MinMax.h" />
     <ClInclude Include="src\Application\Board\Board.h" />
     <ClInclude Include="src\Application\Player\AI\AIPlayer.h" />
     <ClInclude Include="src\Application\Player\Player.h" />
@@ -155,6 +161,7 @@
     <ClInclude Include="src\Scenes\Scene\Scene.h" />
     <ClInclude Include="src\GUI\Utilities.h" />
     <ClInclude Include="src\Tools\Enums\FontID.h" />
+    <ClInclude Include="src\Tools\Enums\GameType.h" />
     <ClInclude Include="src\Tools\Enums\TextureID.h" />
     <ClInclude Include="src\Tools\ResourceHolder\Holders.h" />
     <ClInclude Include="src\Tools\ResourceHolder\ResourceHolder.h" />

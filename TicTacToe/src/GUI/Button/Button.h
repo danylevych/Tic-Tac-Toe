@@ -43,8 +43,11 @@ public: // Overriden section.
 	virtual void Update(sf::Time deltaTime) override;
 	virtual void HandleEvent(const sf::Event& event) override;
 
-public:
+private:
 	void Call();
+
+public:
+	void Press();
 
 public: // Set section. 
 	void SetButtonState(const State& state);

@@ -6,14 +6,11 @@
 #include <vector>
 #include "../../GUI/Button/Button.h"
 
+#include "../Board/Board.h"
+
 class Player
 {
 public:
-	enum class Type {
-		X,
-		O
-	};
-
 	struct Action {
 		int i;
 		int j;
@@ -41,15 +38,15 @@ public:
 	using Ptr = std::unique_ptr<Player>;
 
 private:
-	Type type;
+	Board::PlayerType type;
 
 public:
-	Player(Type type);
+	Player(Board::PlayerType type);
 
 	virtual ~Player() = default;
 
 public:
-	Type GetType() const;
+	Board::PlayerType GetType() const;
 	std::string GetTypeAsString() const;
 
 public:

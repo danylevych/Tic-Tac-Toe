@@ -15,7 +15,7 @@ public:
 
 	virtual ~MainScene() override = default;
 
-private: // Helper functions sections.
+private:
 	void InitComponents();
 };
 

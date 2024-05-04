@@ -1,10 +1,11 @@
 #include "Player.h"
 
-Player::Player(Type type)
+
+Player::Player(Board::PlayerType type)
 	: type(type)
 {	}
 
-Player::Type Player::GetType() const
+Board::PlayerType Player::GetType() const
 {
 	return type;
 }
@@ -13,10 +14,10 @@ std::string Player::GetTypeAsString() const
 {
 	switch (type)
 	{
-	case Player::Type::X:
+	case Board::PlayerType::X:
 		return "X";
 
-	case Player::Type::O:
+	case Board::PlayerType::O:
 		return "O";
 	}
 }
